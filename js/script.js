@@ -4,6 +4,21 @@ let taskDOM = document.querySelector('#task')
 let liveToastDOM = document.querySelectorAll('#liveToast')
 let liveToastButtonDOM = document.querySelectorAll('#liveToast>div>button')
 
+let list = localStorage.getItem('liList') ? localStorage.getItem('liList') : ""
+listDOM.innerHTML = list
+
+function localList(){
+    let listLiDOM = document.querySelectorAll('#list>li')
+    list = ""
+    listLiDOM.forEach(function(lidom){
+        list += lidom.outerHTML
+    })
+    localStorage.setItem('liList',list)
+    // listDOM.innerHTML = list
+    console.log('local Save')
+    console.log(list)
+}
+
 // Listeden Silme İslemini Yapan Fonksiyon
 function deleteElement() {
     let listLiDOM = document.querySelectorAll('#list>li')
@@ -12,12 +27,15 @@ function deleteElement() {
             liDOM.remove()
         })
     })
+    localList()
+    localStorage.setItem('deneme','deneme')
 }
 deleteElement()
 
 // Yapildi isaretlenmesini saglayan bir fonksiyon
 function checkElement(id) {
     id.classList.contains('checked') ? id.classList.remove('checked') : id.classList.add('checked')
+    localList()
 }
 
 // Kayit Basarili Mesaji Kapatma Butonu
@@ -40,9 +58,13 @@ function newElement() {
         li.innerHTML = `${taskDOM.value} ${deleteButton}`
         li.setAttribute("onclick", "checkElement(this)");
         listDOM.appendChild(li);
-        liveToastDOM[0].classList.contains('hide') ? liveToastDOM[0].classList.replace('hide','show') : false
+        liveToastDOM[0].classList.remove('hide');
+        liveToastDOM[0].classList.add('show');
         deleteElement()
     } else {
-        liveToastDOM[1].classList.contains('hide') ? liveToastDOM[1].classList.replace('hide','show') : false
+        liveToastDOM[1].classList.remove('hide');
+        liveToastDOM[1].classList.add('show');
     }
 }
+
+
